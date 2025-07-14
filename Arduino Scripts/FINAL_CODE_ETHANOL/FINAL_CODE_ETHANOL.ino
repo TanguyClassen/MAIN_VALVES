@@ -10,12 +10,12 @@
 
 const char* ssid = "Testing Facility";
 const char* password = "testingfacility";
-const char* server_ip = "192.168.1.17";  // Mac address
+const char* server_ip = "192.168.1.17"; 
 const uint16_t server_port = 4840;
 
 WiFiClient client;
 
-int b_Homing_E = 0, V = 0, b_SingleStep_E = 0;
+int b_Homing_E = 0, w_Main_EV = 0, b_SingleStep_E = 0;
 int previous_homing_e = 0;
 long pos_top = 0, pos_bottom = 0, current_position = 0, target_position = 0;
 bool is_calibrated = false, is_calibrating = false;
@@ -61,9 +61,9 @@ void loop() {
     String line = client.readStringUntil('\n');
     StaticJsonDocument<400> doc;
     if (!deserializeJson(doc, line)) {
-      b_Homing_E = doc["b_Homing_E"].as<int>();
-      V = doc["V"].as<int>();
-      b_SingleStep_E = doc["b_SingleStep_E"].as<int>();
+      b_Homing_E      = doc["b_Homing_E"].as<int>();
+      w_Main_EV       = doc["w_Main_EV"].as<int>();       // ✅ fixed from "V"
+      b_SingleStep_E  = doc["b_SingleStep_E"].as<int>();
 
       if (b_Homing_E == 1 && previous_homing_e == 0 && !is_calibrating) {
         runCalibration();
@@ -81,7 +81,7 @@ void loop() {
         }
 
         // Main position control
-        target_position = map(V, 0, 100, pos_bottom, pos_top);
+        target_position = map(w_Main_EV, 0, 100, pos_bottom, pos_top);
         if (target_position != current_position) {
           moveTo(target_position);
           current_position = target_position;

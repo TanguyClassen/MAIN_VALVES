@@ -29,7 +29,7 @@ node_w_packed_data   = ua.NodeId(base64.b64decode("AQAAAKbhKnGK9zM6o+Y1NI3mYGeQ7
 # === TCP server setup ===
 HOST = "0.0.0.0"
 PORT = 4840
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)192.1
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 sock.bind((HOST, PORT))
 sock.listen(2)
@@ -71,9 +71,9 @@ try:
         }) + "\n"
 
         data_o = json.dumps({
-            "b_Homing_E": homing_o,
-            "w_Main_EV": main_o,
-            "b_SingleStep_E": single_o
+            "b_Homing_O": homing_o,
+            "w_Main_OV": main_o,
+            "b_SingleStep_O": single_o
         }) + "\n"
 
         try:
