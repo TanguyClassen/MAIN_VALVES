@@ -10,26 +10,28 @@ from opcua import Client, ua
 # === OPC UA Setup ===
 OPCUA_SERVER_URL = "opc.tcp://192.168.1.17:4840"
 client = Client(OPCUA_SERVER_URL)
-client.set_user("")  # Optional: add credentials if needed
+client.set_user("")
 client.set_password("")
 client.connect()
 print("✅ Connected to OPC UA valve system")
 
 # === NodeId declarations ===
+# Ethanol
 node_b_Homing_E      = ua.NodeId(base64.b64decode("AQAAAKbhKnGK9zM6o+Y1NI3mYGeQ7iJ7heYzOovcCHuE6i5ztsZA"), 5, ua.NodeIdType.ByteString)
-node_b_Homing_O      = ua.NodeId(base64.b64decode("AQAAAKbhKnGK9zM6o+Y1NI3mYGeQ7iJ7heYzOovcCHuE6i5ztsxA"), 5, ua.NodeIdType.ByteString)
 node_b_SingleStep_E  = ua.NodeId(base64.b64decode("AQAAAKbhKnGK9zM6o+Y1NI3mYGeQ7iJ7heYzOovcE32H5CxxuvclZLbGQA=="), 5, ua.NodeIdType.ByteString)
-node_b_SingleStep_O  = ua.NodeId(base64.b64decode("AQAAAKbhKnGK9zM6o+Y1NI3mYGeQ7iJ7heYzOovcE32H5CxxuvclZLbMQA=="), 5, ua.NodeIdType.ByteString)
 node_i_status_epos_E = ua.NodeId(base64.b64decode("AQAAAKbhKnGK9zM6o+Y1NI3mYGeQ7iJ7heYzOoDcE2CI9zVntuYwe5rcBRQ="), 5, ua.NodeIdType.ByteString)
-node_i_status_epos_O = ua.NodeId(base64.b64decode("AQAAAKbhKnGK9zM6o+Y1NI3mYGeQ7iJ7heYzOoDcE2CI9zVntuYwe5rcDxQ="), 5, ua.NodeIdType.ByteString)
 node_w_main_E        = ua.NodeId(base64.b64decode("AQAAAKbhKnGK9zM6o+Y1NI3mYGeQ7iJ7heYzOp7cDXWA7QVCtsZA"), 5, ua.NodeIdType.ByteString)
+
+# N2O (Oxidizer)
+node_b_Homing_O      = ua.NodeId(base64.b64decode("AQAAAKbhKnGK9zM6o+Y1NI3mYGeQ7iJ7heYzOovcCHuE6i5ztsxA"), 5, ua.NodeIdType.ByteString)
+node_b_SingleStep_O  = ua.NodeId(base64.b64decode("AQAAAKbhKnGK9zM6o+Y1NI3mYGeQ7iJ7heYzOovcE32H5CxxuvclZLbMQA=="), 5, ua.NodeIdType.ByteString)
+node_i_status_epos_O = ua.NodeId(base64.b64decode("AQAAAKbhKnGK9zM6o+Y1NI3mYGeQ7iJ7heYzOoDcE2CI9zVntuYwe5rcDxQ="), 5, ua.NodeIdType.ByteString)
 node_w_main_O        = ua.NodeId(base64.b64decode("AQAAAKbhKnGK9zM6o+Y1NI3mYGeQ7iJ7heYzOp7cDXWA7QVCtsxA"), 5, ua.NodeIdType.ByteString)
-node_w_packed_data   = ua.NodeId(base64.b64decode("AQAAAKbhKnGK9zM6o+Y1NI3mYGeQ7iJ7heYzOp7cMHWK6CVwtuchYIjcL2SK9iEU"), 5, ua.NodeIdType.ByteString)
 
 # === TCP server setup ===
 HOST = "0.0.0.0"
 PORT = 4840
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)192.1
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 sock.bind((HOST, PORT))
 sock.listen(2)
@@ -71,9 +73,9 @@ try:
         }) + "\n"
 
         data_o = json.dumps({
-            "b_Homing_O": homing_o,
-            "w_Main_OV": main_o,
-            "b_SingleStep_O": single_o
+            "b_Homing_E": homing_o,
+            "w_Main_EV": main_o,
+            "b_SingleStep_E": single_o
         }) + "\n"
 
         try:
