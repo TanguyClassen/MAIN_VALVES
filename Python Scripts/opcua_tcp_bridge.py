@@ -30,12 +30,12 @@ node_w_main_O        = ua.NodeId(base64.b64decode("AQAAAKbhKnGK9zM6o+Y1NI3mYGeQ7
 
 # === TCP server setup ===
 HOST = "0.0.0.0"
-PORT = 4840
+PORT = 4841
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 sock.bind((HOST, PORT))
 sock.listen(2)
-print("🖧 Valve system server running on port 4840")
+print("🖧 Valve system server running on port 4850")
 print("⏳ Waiting for 🅴 Ethanol and 🅾️ N₂O valves to connect...")
 
 ethanol_conn = None
@@ -46,7 +46,7 @@ while not ethanol_conn or not n2o_conn:
     if not ethanol_conn:
         ethanol_conn = conn
         print(f"✅ 🅴 Ethanol valve connected from {addr}")
-    elif not n2o_conn:
+    if not n2o_conn:
         n2o_conn = conn
         print(f"✅ 🅾️ N₂O valve connected from {addr}")
 
